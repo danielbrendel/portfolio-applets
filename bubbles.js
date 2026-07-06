@@ -78,7 +78,7 @@ window.Bubbles = class {
 				</div>
 				
 				<div class="bubble-action">
-					<a class="btn" href="javascript:void(0);" onclick="let items = document.querySelectorAll('.bubble-item'); for (let i = 0; i < items.length; i++) { const item = items[i].children[0]; item.fired = false; item.classList.remove('is-popped'); }">Reset</a>
+					<a class="btn" href="javascript:void(0);" onclick="let items = document.querySelectorAll('.bubble-item'); for (let i = 0; i < items.length; i++) { const item = items[i].children[0]; item.fired = false; item.classList.remove('is-popped'); } window.playAudio('reset.wav');">Reset</a>
 				</div>
 			</div>
         `;
