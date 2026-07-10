@@ -44,7 +44,7 @@ window.DarkNature = class {
      */
     onShow()
     {
-		const IMAGE_COUNT = 10;
+		const IMAGE_COUNT = 227;
 		const DELAY_SWITCH = 5000;
 
 		let currentIndex = 0;
