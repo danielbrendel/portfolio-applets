@@ -46,12 +46,26 @@ window.DarkNature = class {
     {
 		const IMAGE_COUNT = 227;
 		const DELAY_SWITCH = 5000;
+		
+		if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-dark-nature');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
+			
+			window.setWidgetCentered(appwnd);
+		}
 
 		let currentIndex = 0;
 
 		const imageContainer = document.querySelector('#column-window-dark-nature').children[0].children[1];
 		imageContainer.classList.add('dark-nature-applet-crossfade');
 		imageContainer.style.margin = '0';
+		imageContainer.style.cursor = 'pointer';
+		if (window.innerWidth < 500) {
+			imageContainer.style.height = '94.5%';
+		}
 
 		function imageAsset(num) {
 			return window.location.origin + '/applets/naturepics/dark-nature-' + num + '.jpg';
@@ -59,8 +73,13 @@ window.DarkNature = class {
 
 		imageContainer.style.backgroundImage = `url('` + imageAsset(currentIndex) + `')`;
 		imageContainer.style.setProperty('--current-bg', `url('` + imageAsset(currentIndex) + `')`);
+		
+		imageContainer.addEventListener('click', function() {
+			window.darkNatureSwapBanner(1);
+			window.playAudio('click.wav');
+		});
 
-		function swapBanner() {
+		window.darkNatureSwapBanner = function(timeout = 2000) {
 			const nextIndex = (currentIndex + 1) % IMAGE_COUNT;
 			
 			imageContainer.style.setProperty('--next-bg', `url('` + imageAsset(currentIndex) + `')`);
@@ -72,11 +91,11 @@ window.DarkNature = class {
 				imageContainer.classList.remove('dark-nature-applet-fade');
 
 				currentIndex = nextIndex;
-			}, 2000);
-		}
+			}, timeout);
+		};
 
-		swapBanner();
-		setInterval(swapBanner, DELAY_SWITCH);
+		window.darkNatureSwapBanner();
+		setInterval(window.darkNatureSwapBanner, DELAY_SWITCH);
     }
 
     /**
