@@ -193,7 +193,7 @@ window.DesktopDestroyer = class {
 			@media screen and (max-width: 500px) {
 				.desktop-destroyer-screenshots {
 					width: 105.2%;
-					height: 45vw;
+					height: 45.5vw;
 					left: -9px;
 				}
 			}
