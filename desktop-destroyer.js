@@ -101,7 +101,18 @@ window.DesktopDestroyer = class {
 				
 				<div class="desktop-destroyer-screenshots"></div>
 				
-				<div class="desktop-destroyer-link"><a href="https://www.casual-desktop-game.com" target="_blank">&gt;&gt; Download the game &lt;&lt;</a></div>
+				<div class="desktop-destroyer-links">
+					<div class="desktop-destroyer-downloads">
+						<a class="download-steam" href="https://store.steampowered.com/app/1001860/Casual_Desktop_Game" target="_blank">Steam</a>
+						<a class="download-itchio" href="https://danielbrendel.itch.io/casual-desktop-game" target="_blank">itch.io</a>
+						<a class="download-indiedb" href="https://www.indiedb.com/games/casual-desktop-game" target="_blank">IndieDb</a>
+						<a class="download-gamejolt" href="https://gamejolt.com/games/casual-desktop-game/785059" target="_blank">Gamejolt</a>
+					</div>
+					
+					<div class="desktop-destroyer-homepage">
+						<a href="https://www.casual-desktop-game.com" target="_blank">&gt;&gt; Homepage &lt;&lt;</a>
+					</div>
+				</div>
 			</div>
         `;
     }
@@ -115,7 +126,7 @@ window.DesktopDestroyer = class {
     {
         return {
             wndWidth: '640px',
-            wndHeight: '500px',
+            wndHeight: '563px',
             btnClose: true,
             btnMaximize: false,
             btnMinimize: false
@@ -186,17 +197,78 @@ window.DesktopDestroyer = class {
 			  opacity: 1;
 			}
 			
-			.desktop-destroyer-link {
+			.desktop-destroyer-links {
 				margin-top: 20px;
-				font-size: 1.2em;
 			}
 			
-			.desktop-destroyer-link a {
+			.desktop-destroyer-downloads {
+				margin-top: 30px;
+			}
+			
+			.desktop-destroyer-downloads a {
+				border-radius: 5px;
+				font-size: 1.2em;
+				padding-top: 5px;
+				padding-left: 25px;
+				padding-right: 25px;
+				padding-bottom: 5px;
+				margin-left: 2px;
+				margin-right: 2px;
+				text-decoration: none;
+			}
+			
+			.desktop-destroyer-downloads a:hover {
+				text-decoration: none;
+			}
+			
+			.desktop-destroyer-downloads a.download-steam {
+				color: rgb(255, 255, 255);
+				background-color: rgb(105, 163, 123);
+			}
+			
+			.desktop-destroyer-downloads a.download-steam:hover {
+				background-color: rgb(143, 190, 154);
+			}
+			
+			.desktop-destroyer-downloads a.download-itchio {
+				color: rgb(255, 255, 255);
+				background-color: rgb(223, 100, 100);
+			}
+			
+			.desktop-destroyer-downloads a.download-itchio:hover {
+				background-color: rgb(237, 132, 132);
+			}
+			
+			.desktop-destroyer-downloads a.download-indiedb {
+				color: rgb(255, 255, 255);
+				background-color: rgb(111, 132, 200);
+			}
+			
+			.desktop-destroyer-downloads a.download-indiedb:hover {
+				background-color: rgb(143, 163, 231);
+			}
+			
+			.desktop-destroyer-downloads a.download-gamejolt {
+				color: rgb(255, 255, 255);
+				background-color: rgb(192, 143, 85);
+			}
+			
+			.desktop-destroyer-downloads a.download-gamejolt:hover {
+				background-color: rgb(220, 169, 111);
+			}
+			
+			.desktop-destroyer-homepage {
+				margin-top: 30px;
+				font-size: 1.2em;
+				text-transform: uppercase;
+			}
+			
+			.desktop-destroyer-homepage a {
 				color: #a3b3ff;
 				text-decoration: none;
 			}
 			
-			.desktop-destroyer-link a:hover {
+			.desktop-destroyer-homepage a:hover {
 				color: #a3b3ff;
 				text-decoration: underline;
 			}
