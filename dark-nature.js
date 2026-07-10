@@ -51,13 +51,14 @@ window.DarkNature = class {
 			const appwnd = document.querySelector('#column-window-dark-nature');
 			
 			appwnd.style.width = `${window.innerWidth - 50}px`;
+            appwnd.style.height = `${window.innerWidth - 50}px`;
 			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
 			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
 			
 			window.setWidgetCentered(appwnd);
 		}
 
-		let currentIndex = 0;
+		let currentIndex = window.random(0, IMAGE_COUNT - 1);
 
 		const imageContainer = document.querySelector('#column-window-dark-nature').children[0].children[1];
 		imageContainer.classList.add('dark-nature-applet-crossfade');
@@ -80,7 +81,7 @@ window.DarkNature = class {
 		});
 
 		window.darkNatureSwapBanner = function(timeout = 2000) {
-			const nextIndex = (currentIndex + 1) % IMAGE_COUNT;
+			const nextIndex = window.random(0, IMAGE_COUNT - 1);
 			
 			imageContainer.style.setProperty('--next-bg', `url('` + imageAsset(currentIndex) + `')`);
 			imageContainer.classList.add('dark-nature-applet-fade');

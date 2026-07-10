@@ -47,12 +47,13 @@ window.DesktopDestroyer = class {
 		const IMAGE_COUNT = 91;
 		const DELAY_SWITCH = 5000;
 
-		let currentIndex = 0;
+		let currentIndex = window.random(0, IMAGE_COUNT - 1);
 		
 		if (window.innerWidth < 500) {
 			const appwnd = document.querySelector('#column-window-desktop-destroyer');
 			
 			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.style.height = `${window.innerWidth - 50}px`;
 			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
 			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
 			
@@ -77,7 +78,7 @@ window.DesktopDestroyer = class {
 		});
 
 		window.desktopDestroyerSwapBanner = function(timeout = 2000) {
-			const nextIndex = (currentIndex + 1) % IMAGE_COUNT;
+			const nextIndex = window.random(0, IMAGE_COUNT - 1);
 			
 			imageContainer.style.setProperty('--next-bg', `url('` + imageAsset(currentIndex) + `')`);
 			imageContainer.classList.add('desktop-destroyer-screenshots-fade');
