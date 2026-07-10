@@ -48,10 +48,21 @@ window.DesktopDestroyer = class {
 		const DELAY_SWITCH = 5000;
 
 		let currentIndex = 0;
+		
+		if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-desktop-destroyer');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
+			
+			window.setWidgetCentered(appwnd);
+		}
 
 		const imageContainer = document.querySelector('#column-window-desktop-destroyer').children[0].children[1].children[0].children[1];
 		imageContainer.classList.add('desktop-destroyer-screenshots-crossfade');
 		imageContainer.style.margin = '0';
+		imageContainer.style.cursor = 'pointer';
 
 		function imageAsset(num) {
 			return window.location.origin + '/applets/cdgscreens/desktop-destroyer-' + num + '.jpg';
@@ -59,8 +70,13 @@ window.DesktopDestroyer = class {
 
 		imageContainer.style.backgroundImage = `url('` + imageAsset(currentIndex) + `')`;
 		imageContainer.style.setProperty('--current-bg', `url('` + imageAsset(currentIndex) + `')`);
+		
+		imageContainer.addEventListener('click', function() {
+			window.desktopDestroyerSwapBanner(1);
+			window.playAudio('click.wav');
+		});
 
-		function swapBanner() {
+		window.desktopDestroyerSwapBanner = function(timeout = 2000) {
 			const nextIndex = (currentIndex + 1) % IMAGE_COUNT;
 			
 			imageContainer.style.setProperty('--next-bg', `url('` + imageAsset(currentIndex) + `')`);
@@ -72,11 +88,11 @@ window.DesktopDestroyer = class {
 				imageContainer.classList.remove('desktop-destroyer-screenshots-fade');
 
 				currentIndex = nextIndex;
-			}, 2000);
+			}, timeout);
 		}
 
-		swapBanner();
-		setInterval(swapBanner, DELAY_SWITCH);
+		window.desktopDestroyerSwapBanner();
+		setInterval(window.desktopDestroyerSwapBanner, DELAY_SWITCH);
     }
 
     /**
@@ -174,6 +190,14 @@ window.DesktopDestroyer = class {
 				left: -9px;
 			}
 			
+			@media screen and (max-width: 500px) {
+				.desktop-destroyer-screenshots {
+					width: 105.2%;
+					height: 45vw;
+					left: -9px;
+				}
+			}
+			
 			.desktop-destroyer-screenshots-crossfade {
 			  position: relative;
 			  background-size: 100% 100%;
@@ -215,6 +239,13 @@ window.DesktopDestroyer = class {
 				margin-left: 2px;
 				margin-right: 2px;
 				text-decoration: none;
+			}
+			
+			@media screen and (max-width: 500px) {
+				.desktop-destroyer-downloads a {
+					padding-left: 15px;
+					padding-right: 15px;
+				}
 			}
 			
 			.desktop-destroyer-downloads a:hover {
