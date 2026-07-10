@@ -51,7 +51,6 @@ window.ChatStrike = class {
 			
 			window.setWidgetCentered(appwnd);
 		}
-		
     }
 
     onClose()
