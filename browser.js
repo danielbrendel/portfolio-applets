@@ -44,6 +44,7 @@ window.Browser = class {
      */
     onShow()
     {
+		document.getElementById('browser-iframe').src = window.location.origin;
     }
 
     /**
