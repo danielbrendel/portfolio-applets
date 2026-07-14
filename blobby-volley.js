@@ -45,6 +45,7 @@ window.BlobbyVolley = class {
     onShow()
     {
 		document.getElementById('blobby-volley-applet').innerHTML = `<iframe 
+			scrolling="no"
 			src="https://blobbyvolley.de/data/bv2browser/index.html">
 		</iframe>`;
     }
