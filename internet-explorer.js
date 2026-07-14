@@ -84,7 +84,7 @@ window.InternetExplorer = class {
 		div.innerHTML = html;
 		div.addEventListener('click', function() {
 			body.removeChild(div);
-			window.notify('Internet Explorer', 'Maybe you should start using a different browser...', 'warning', 15000);
+			window.notify('Internet Explorer', 'Maybe you should start using a different browser...', 'warning', 10000);
 		});
 		
 		let body = document.querySelector('body');
