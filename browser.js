@@ -44,6 +44,19 @@ window.Browser = class {
      */
     onShow()
     {
+		if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-browser');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.style.height = `${window.innerHeight - 150}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerHeight - 150}px`;
+			
+			document.querySelector('.browser-content').style.height = `${window.innerHeight - 235}px`;
+			
+			window.setWidgetCentered(appwnd);
+		}
+		
 		document.getElementById('browser-iframe').src = window.location.origin;
     }
 
@@ -68,8 +81,8 @@ window.Browser = class {
             <div class="browser-applet">
 				<div class="browser-bar">
 					<div class="browser-buttons">
-						<a class="btn" href="javascript:void(0);" onclick="document.getElementById('browser-iframe').src = window.location.origin;"><img src="` + window.location.origin + '/img/icons/home.png' + `" alt="icon"/></a>
-						<a class="btn" href="javascript:void(0);" onclick="document.getElementById('browser-iframe').src += '';"><img src="` + window.location.origin + '/img/icons/refresh.png' + `" alt="icon"/></a>
+						<div><a class="btn" href="javascript:void(0);" onclick="document.getElementById('browser-iframe').src = window.location.origin;"><img src="` + window.location.origin + '/img/icons/home.png' + `" alt="icon"/></a></div>
+						<div><a class="btn" href="javascript:void(0);" onclick="document.getElementById('browser-iframe').src += '';"><img src="` + window.location.origin + '/img/icons/refresh.png' + `" alt="icon"/></a></div>
 					</div>
 					
 					<div class="browser-input">
@@ -142,6 +155,16 @@ window.Browser = class {
 				width: 12%;
 			}
 			
+			@media screen and (max-width: 500px) {
+				.browser-buttons {
+					width: 32%;
+				}
+			}
+			
+			.browser-buttons div {
+				display: inline-block;
+			}
+			
 			.browser-buttons a.btn {
 				min-width: 32px;
 				min-height: 32px;
@@ -155,6 +178,12 @@ window.Browser = class {
 				display: inline-block;
 				width: 87%;
 				top: -8px;
+			}
+			
+			@media screen and (max-width: 500px) {
+				.browser-input {
+					width: 60%;
+				}
 			}
 			
 			.browser-input input {

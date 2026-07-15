@@ -44,6 +44,17 @@ window.IrcChat = class {
      */
     onShow()
     {
+		if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-irc-chat');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.style.height = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
+			
+			window.setWidgetCentered(appwnd);
+		}
+		
 		document.getElementById('irc-chat-applet').innerHTML = `<iframe src="https://kiwiirc.com/nextclient/?settings=433b0c9001339ed84d6302da530ffc16"></iframe>`;
     }
 

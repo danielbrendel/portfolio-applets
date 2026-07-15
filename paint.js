@@ -44,6 +44,17 @@ window.Paint = class {
      */
     onShow()
     {
+		if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-paint');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.style.height = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
+			
+			window.setWidgetCentered(appwnd);
+		}
+		
 		document.getElementById('paint-applet').innerHTML = `<iframe 
 			id="paint-iframe"
 			src="https://jspaint.app">
@@ -122,6 +133,12 @@ window.Paint = class {
 			  width: 100%;
 			  height: 96%;
 			  overflow: hidden;
+			}
+			
+			@media screen and (max-width: 500px) {
+				#paint-applet {
+					height: 94.5%;
+				}
 			}
 			
 			#paint-applet iframe {

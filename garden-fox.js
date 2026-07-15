@@ -44,6 +44,17 @@ window.GardenFox = class {
      */
     onShow()
     {
+		if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-garden-fox');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.style.height = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
+			
+			window.setWidgetCentered(appwnd);
+		}
+		
 		document.getElementById('garden-fox-applet').innerHTML = `<iframe 
 			id="garden-fox-iframe"
 			src="https://game.hortusfox.com">
@@ -122,6 +133,13 @@ window.GardenFox = class {
 			  width: 100%;
 			  height: 97%;
 			  overflow: hidden;
+			}
+			
+			@media screen and (max-width: 500px) {
+				#garden-fox-applet {
+					top: -8px;
+					height: 94.5%;
+				}
 			}
 			
 			#garden-fox-applet iframe {

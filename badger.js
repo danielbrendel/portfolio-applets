@@ -39,6 +39,17 @@ window.Badger = class {
 
     onShow()
     {
+		if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-badger');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.style.height = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
+			
+			window.setWidgetCentered(appwnd);
+		}
+		
         document.getElementById('badger-applet').innerHTML = `
 			<video autoplay loop playsinline>
 				<source src="` + window.location.origin + '/clips/badger-dance.mp4' + `" type="video/mp4">
