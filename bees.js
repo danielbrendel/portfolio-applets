@@ -48,6 +48,17 @@ window.Bees = class {
 		const DELAY_SWITCH = 5000;
 
 		let currentIndex = 0;
+		
+		if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-bees');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.style.height = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
+			
+			window.setWidgetCentered(appwnd);
+		}
 
 		const imageContainer = document.querySelector('#column-window-bees').children[0].children[1];
 		imageContainer.classList.add('bee-applet-crossfade');
@@ -147,6 +158,7 @@ window.Bees = class {
 			  height: 96%;
 			  background-size: 100% 100%;
 			  background-position: center;
+			  background-repeat: no-repeat;
 			  background-image: var(--current-bg); 
 			  overflow: hidden;
 			}
@@ -157,9 +169,21 @@ window.Bees = class {
 			  top: 0; left: 0; width: 100%; height: 100%;
 			  background-size: 100% 100%;
 			  background-position: center;
+			  background-repeat: no-repeat;
 			  background-image: var(--next-bg);
 			  opacity: 0;
 			  transition: opacity 2s ease-in-out;
+			}
+			
+			@media screen and (max-width: 500px) {
+				.bee-applet-crossfade {
+					height: 94.8%;
+					background-size: cover;
+				}
+				
+				.bee-applet-crossfade::after {
+					background-size: cover;
+				}
 			}
 
 			.bee-applet-crossfade.bee-applet-fade::after {
