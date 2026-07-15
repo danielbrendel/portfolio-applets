@@ -70,8 +70,13 @@ window.Bees = class {
 
 		imageContainer.style.backgroundImage = `url('` + imageAsset(currentIndex) + `')`;
 		imageContainer.style.setProperty('--current-bg', `url('` + imageAsset(currentIndex) + `')`);
+		
+		imageContainer.addEventListener('click', function() {
+			window.beesSwapBanner(1);
+			window.playAudio('click.wav');
+		});
 
-		function swapBanner() {
+		window.beesSwapBanner = function(timeout = 2000) {
 			const nextIndex = (currentIndex + 1) % IMAGE_COUNT;
 			
 			imageContainer.style.setProperty('--next-bg', `url('` + imageAsset(currentIndex) + `')`);
@@ -83,11 +88,11 @@ window.Bees = class {
 				imageContainer.classList.remove('bee-applet-fade');
 
 				currentIndex = nextIndex;
-			}, 2000);
-		}
+			}, timeout);
+		};
 
-		swapBanner();
-		setInterval(swapBanner, DELAY_SWITCH);
+		window.beesSwapBanner();
+		setInterval(window.beesSwapBanner, DELAY_SWITCH);
     }
 
     /**
