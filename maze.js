@@ -44,6 +44,17 @@ window.Maze = class {
      */
     onShow()
     {
+		if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-maze');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.style.height = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerWidth - 50}px`;
+			
+			window.setWidgetCentered(appwnd);
+		}
+		
 		document.getElementById('maze-applet').innerHTML = `<iframe 
 			scrolling="no"
 			src="https://maze3d.danielbrendel.com/maze.html">
