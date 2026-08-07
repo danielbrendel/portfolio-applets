@@ -116,6 +116,20 @@ window.NpdQuickhelp = class {
             },
 
             {
+                ident: 'turmoil',
+                label: '⛈️ Turmoil',
+                help: `Are you currently in a situation of high emotional sensation?
+                
+                Something might have had you triggered. Maybe you feel intense emotional pain. Maybe you feel intense anger. Here is how you can actively counter these feelings.
+
+                <ul>
+                    <li>Activation: Go for a long walk</li>
+                    <li>Unloading: Write down your emotional feelings and thoughts</li>
+                    <li>Act: Write down 1 to 3 doings for a change</li>
+                </ul>`
+            },
+
+            {
                 ident: 'shame',
                 label: '😶‍🌫️ Shame',
                 help: `Are you currently facing thoughts of shame?
@@ -215,14 +229,25 @@ window.NpdQuickhelp = class {
      */
     onShow()
     {
-		const wnd = document.querySelector('#column-window-sample-applet');
-		const xpos = window.readSetting('sample-applet-position-x', null);
-		const ypos = window.readSetting('sample-applet-position-y', null);
+		const wnd = document.querySelector('#column-window-npd-quickhelp');
+		const xpos = window.readSetting('npd-quickhelp-position-x', null);
+		const ypos = window.readSetting('npd-quickhelp-position-y', null);
 		
 		if ((wnd) && (xpos) && (ypos)) {
 			wnd.style.position = 'absolute';
 			wnd.style.left = xpos;
 			wnd.style.top = ypos;
+		}
+
+        if (window.innerWidth < 500) {
+			const appwnd = document.querySelector('#column-window-npd-quickhelp');
+			
+			appwnd.style.width = `${window.innerWidth - 50}px`;
+			appwnd.style.height = `${window.innerHeight - 150}px`;
+			appwnd.children[0].style.width = `${window.innerWidth - 50}px`;
+			appwnd.children[0].style.height = `${window.innerHeight - 150}px`;
+			
+			window.setWidgetCentered(appwnd);
 		}
 
         window.showAnotherNPDMeme();
@@ -237,10 +262,10 @@ window.NpdQuickhelp = class {
     {
         console.log('onClose');
 		
-		const wnd = document.querySelector('#column-window-npd-quickhelp-applet');
+		const wnd = document.querySelector('#column-window-npd-quickhelp');
 		if (wnd) {
-			const xpos = window.saveSetting('npd-quickhelp-applet-position-x', wnd.style.left, false);
-			const ypos = window.saveSetting('npd-quickhelp-applet-position-y', wnd.style.top, false);
+			const xpos = window.saveSetting('npd-quickhelp-position-x', wnd.style.left, false);
+			const ypos = window.saveSetting('npd-quickhelp-position-y', wnd.style.top, false);
 		}
     }
 
@@ -273,6 +298,10 @@ window.NpdQuickhelp = class {
 
                 <div class="npd-quickhelp-applet-memes">
                     <img src="" onclick="window.showAnotherNPDMeme(); window.playAudio('click.wav');" alt="meme"/>
+                </div>
+
+                <div class="npd-quickhelp-applet-notice">
+                    This is a first aid applet for people with <a href="https://www.danielbrendel.com/blog/41-awareness-for-narcissistic-personality-disorder">Narcissistic Personality Disorder</a>. We are valid. We deserve well-being.
                 </div>
 			</div>
         `;
@@ -403,6 +432,23 @@ window.NpdQuickhelp = class {
 
             .npd-quickhelp-applet-memes img {
                 width: 100%;
+            }
+
+            .npd-quickhelp-applet-notice {
+                position: relative;
+                font-size: 0.8em;
+                margin-top: 25px;
+                margin-bottom: 20px;
+            }
+
+            .npd-quickhelp-applet-notice a {
+                color: #925cf2;
+                text-decoration: none;
+            }
+
+            .npd-quickhelp-applet-notice a:hover {
+                color: #b38df7;
+                text-decoration: underline;
             }
         `;
     }
