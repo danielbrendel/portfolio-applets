@@ -16,6 +16,9 @@ window.Autoexec = class {
      */
     onInstall()
     {
+        const defaultCode = `//\n// Autoexec content\n// Enter auto-executed code here\n//\n\nfor (let key in navigator) {\n\tif (typeof navigator[key] !== 'function') {\n\t\tconsole.log(key + ': ' + navigator[key]);\n\t}\n}\n`;
+
+        window.saveSetting('autoexec-content', defaultCode, false);
     }
 
     /**

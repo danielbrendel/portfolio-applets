@@ -192,7 +192,7 @@ window.SoundLife = class {
 			.soundboard-column {
 				position: relative;
 				display: inline-block;
-				width: 49%;
+				width: 45%;
 				top: 10px;
 			}
 			
@@ -219,6 +219,12 @@ window.SoundLife = class {
 				
 				transition: all 0.1s ease-in-out;
             }
+
+			@media screen and (max-width: 768px) {
+				.soundboard-item {
+					font-size: 1.2em;
+				}
+			}
 			
 			.soundboard-item:hover {
 				color: #FFD700;

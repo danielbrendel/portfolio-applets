@@ -164,6 +164,8 @@ window.NarcissisticInjury = class {
             'startup-success-npd.png'
         ];
 
+        window.currentMemeIndex = window.random(0, window.oNarcissisticInjuryMemes.length - 1);
+
         window.showNarcissisticInjuryAid = function(ident) {
             const info = document.querySelector('.narcissistic-injury-applet-info');
             const target = document.querySelector('.narcissistic-injury-applet-topics');
@@ -242,7 +244,13 @@ window.NarcissisticInjury = class {
         };
 
         window.showAnotherNPDMeme = function() {
-            const meme = window.oNarcissisticInjuryMemes[window.random(0, window.oNarcissisticInjuryMemes.length - 1)];
+            window.currentMemeIndex++;
+
+            if (window.currentMemeIndex >= window.oNarcissisticInjuryMemes.length) {
+                window.currentMemeIndex = 0;
+            }
+
+            const meme = window.oNarcissisticInjuryMemes[window.currentMemeIndex];
             document.querySelector('.narcissistic-injury-applet-memes').children[0].src = window.location.origin + '/img/npd-memes/' + meme;
         };
     }
