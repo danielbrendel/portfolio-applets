@@ -1,13 +1,13 @@
 /**
- * NPD Quickhelp Applet
+ * Narcissistic Injury Applet
  */
-window.NpdQuickhelp = class {
+window.NarcissisticInjury = class {
     /**
      * Construct class object instance
      */
     constructor()
     {
-        window.oNPDQuickHelpTopics = [
+        window.oNarcissisticInjuryTopics = [
             {
                 ident: 'inadequacy',
                 label: '🚀 Inadequacy',
@@ -149,7 +149,7 @@ window.NpdQuickhelp = class {
             },
         ];
 
-        window.oNPDQuickHelpMemes = [
+        window.oNarcissisticInjuryMemes = [
             'genius-meme-1.jpg',
             'imperfect-comment.jpg',
             'narcissistic-dog.jpg',
@@ -164,19 +164,21 @@ window.NpdQuickhelp = class {
             'startup-success-npd.png'
         ];
 
-        window.showNPDQuickHelp = function(ident) {
-            const info = document.querySelector('.npd-quickhelp-applet-info');
-            const target = document.querySelector('.npd-quickhelp-applet-topics');
+        window.showNarcissisticInjuryAid = function(ident) {
+            const info = document.querySelector('.narcissistic-injury-applet-info');
+            const target = document.querySelector('.narcissistic-injury-applet-topics');
+            const actions = document.querySelector('.narcissistic-injury-applet-data');
             if ((target) && (info)) {
-                window.oNPDQuickHelpOldInfo = info.innerHTML;
-                window.oNPDQuickHelpOldContent = target.innerHTML;
-                const restoreOld = `document.querySelector('.` + target.className + `').innerHTML = window.oNPDQuickHelpOldContent; document.querySelector('.` + info.className + `').innerHTML = window.oNPDQuickHelpOldInfo;`;
+                window.oNarcissisticInjuryOldInfo = info.innerHTML;
+                window.oNarcissisticInjuryOldContent = target.innerHTML;
+                const restoreOld = `document.querySelector('.` + target.className + `').innerHTML = window.oNarcissisticInjuryOldContent; document.querySelector('.` + info.className + `').innerHTML = window.oNarcissisticInjuryOldInfo;`;
                 
-                for (let i = 0; i < window.oNPDQuickHelpTopics.length; i++) {
-                    if (window.oNPDQuickHelpTopics[i].ident === ident) {
-                        const customRemarks = `<div class="npd-quickhelp-applet-textarea"><textarea id="custom-remarks-` + window.oNPDQuickHelpTopics[i].ident + `" oninput="window.saveSetting(this.id, this.value, false);">` + window.readSetting('custom-remarks-' + window.oNPDQuickHelpTopics[i].ident, '') + `</textarea></div>`;
-                        target.innerHTML = `<div class="npd-quickhelp-applet-helptext">` + window.oNPDQuickHelpTopics[i].help.replaceAll("\n", "<br/>") + `</div>` + customRemarks + `<div class="npd-quickhelp-applet-button"><a class="btn" href="javascript:void(0);" onclick="` + restoreOld + `; document.querySelector('.npd-quickhelp-applet').scrollTop = 0; window.playAudio('click.wav');">Go back</a></div><br/><br/>`;
-                        info.innerHTML = window.oNPDQuickHelpTopics[i].label;
+                for (let i = 0; i < window.oNarcissisticInjuryTopics.length; i++) {
+                    if (window.oNarcissisticInjuryTopics[i].ident === ident) {
+                        const customRemarks = `<div class="narcissistic-injury-applet-textarea"><textarea id="custom-remarks-` + window.oNarcissisticInjuryTopics[i].ident + `" oninput="window.saveSetting(this.id, this.value, false);">` + window.readSetting('custom-remarks-' + window.oNarcissisticInjuryTopics[i].ident, '') + `</textarea></div>`;
+                        target.innerHTML = `<div class="narcissistic-injury-applet-helptext">` + window.oNarcissisticInjuryTopics[i].help.replaceAll("\n", "<br/>") + `</div>` + customRemarks + `<div class="narcissistic-injury-applet-button"><a class="btn" href="javascript:void(0);" onclick="` + restoreOld + `; document.querySelector('.narcissistic-injury-applet').scrollTop = 0; document.querySelector('.` + actions.className + `').style.display = 'inherit'; window.playAudio('click.wav');">Go back</a></div><br/><br/>`;
+                        info.innerHTML = window.oNarcissisticInjuryTopics[i].label;
+                        actions.style.display = 'none';
                         return;
                     }
                 }
@@ -185,9 +187,63 @@ window.NpdQuickhelp = class {
             }
         };
 
+        window.oNarcissisticInjuryExportNotes = function() {
+            let data = [];
+
+            for (let i = 0; i < window.oNarcissisticInjuryTopics.length; i++) {
+                const content = window.readSetting('custom-remarks-' + window.oNarcissisticInjuryTopics[i].ident, '');
+
+                data.push({
+                    ident: window.oNarcissisticInjuryTopics[i].ident,
+                    content: content
+                });
+            }
+
+            const filename = `narcissistic-injury-${Date.now()}.json`;
+
+            const json = JSON.stringify(data, null, 4);
+            const blob = new Blob([json], { type: "application/json" });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+
+            URL.revokeObjectURL(link.href);
+        };
+
+        window.oNarcissisticInjuryImportNotes = function() {
+            const elem = document.createElement('input');
+            elem.type = 'file';
+            elem.accept = 'application/json';
+
+            elem.onchange = function(event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    try {
+                        const notes = JSON.parse(e.target.result);
+                        
+                        for (let i = 0; i < notes.length; i++) {
+                            window.saveSetting('custom-remarks-' + notes[i].ident, notes[i].content, false);
+                        }
+
+                        window.notify('Note import', 'Successfully imported your notes.');
+                    } catch (error) {
+                        console.error(error);
+                    }
+                };
+
+                reader.readAsText(file);
+            };
+
+            elem.click();
+        };
+
         window.showAnotherNPDMeme = function() {
-            const meme = window.oNPDQuickHelpMemes[window.random(0, window.oNPDQuickHelpMemes.length - 1)];
-            document.querySelector('.npd-quickhelp-applet-memes').children[0].src = window.location.origin + '/img/npd-memes/' + meme;
+            const meme = window.oNarcissisticInjuryMemes[window.random(0, window.oNarcissisticInjuryMemes.length - 1)];
+            document.querySelector('.narcissistic-injury-applet-memes').children[0].src = window.location.origin + '/img/npd-memes/' + meme;
         };
     }
 
@@ -207,8 +263,8 @@ window.NpdQuickhelp = class {
      */
     onRemove()
     {
-        for (let i = 0; i < window.oNPDQuickHelpTopics.length; i++) {
-            localStorage.removeItem('custom-remarks-' + window.oNPDQuickHelpTopics[i].ident);
+        for (let i = 0; i < window.oNarcissisticInjuryTopics.length; i++) {
+            localStorage.removeItem('custom-remarks-' + window.oNarcissisticInjuryTopics[i].ident);
         }
     }
 
@@ -229,9 +285,9 @@ window.NpdQuickhelp = class {
      */
     onShow()
     {
-		const wnd = document.querySelector('#column-window-npd-quickhelp');
-		const xpos = window.readSetting('npd-quickhelp-position-x', null);
-		const ypos = window.readSetting('npd-quickhelp-position-y', null);
+		const wnd = document.querySelector('#column-window-narcissistic-injury');
+		const xpos = window.readSetting('narcissistic-injury-position-x', null);
+		const ypos = window.readSetting('narcissistic-injury-position-y', null);
 		
 		if ((wnd) && (xpos) && (ypos)) {
 			wnd.style.position = 'absolute';
@@ -240,7 +296,7 @@ window.NpdQuickhelp = class {
 		}
 
         if (window.innerWidth < 500) {
-			const appwnd = document.querySelector('#column-window-npd-quickhelp');
+			const appwnd = document.querySelector('#column-window-narcissistic-injury');
 			
 			appwnd.style.width = `${window.innerWidth - 50}px`;
 			appwnd.style.height = `${window.innerHeight - 150}px`;
@@ -262,10 +318,10 @@ window.NpdQuickhelp = class {
     {
         console.log('onClose');
 		
-		const wnd = document.querySelector('#column-window-npd-quickhelp');
+		const wnd = document.querySelector('#column-window-narcissistic-injury');
 		if (wnd) {
-			const xpos = window.saveSetting('npd-quickhelp-position-x', wnd.style.left, false);
-			const ypos = window.saveSetting('npd-quickhelp-position-y', wnd.style.top, false);
+			const xpos = window.saveSetting('narcissistic-injury-position-x', wnd.style.left, false);
+			const ypos = window.saveSetting('narcissistic-injury-position-y', wnd.style.top, false);
 		}
     }
 
@@ -277,30 +333,36 @@ window.NpdQuickhelp = class {
     view()
     {
         let topicButtons = ``;
-        for (let i = 0; i < window.oNPDQuickHelpTopics.length; i++) {
+        for (let i = 0; i < window.oNarcissisticInjuryTopics.length; i++) {
             topicButtons += `
-                <div class="npd-quickhelp-applet-button">
-                    <a class="btn" href="javascript:void(0);" onclick="window.showNPDQuickHelp('` + window.oNPDQuickHelpTopics[i].ident + `'); window.playAudio('click.wav');">` + window.oNPDQuickHelpTopics[i].label + `</a>
+                <div class="narcissistic-injury-applet-button">
+                    <a class="btn" href="javascript:void(0);" onclick="window.showNarcissisticInjuryAid('` + window.oNarcissisticInjuryTopics[i].ident + `'); window.playAudio('click.wav');">` + window.oNarcissisticInjuryTopics[i].label + `</a>
                 </div>
             `;
         }
 
         return `
-            <div class="npd-quickhelp-applet">
-				<div class="npd-quickhelp-applet-info">
+            <div class="narcissistic-injury-applet">
+				<div class="narcissistic-injury-applet-info">
 					<div>👑 Having a narcissistic injury? 👑</div>
                     <div>➡️ There is help! ⬅️</div>
 				</div>
 				
-				<div class="npd-quickhelp-applet-topics">
+				<div class="narcissistic-injury-applet-topics">
 					` + topicButtons + `
 				</div>
 
-                <div class="npd-quickhelp-applet-memes">
+                <div class="narcissistic-injury-applet-data">
+                    <span>💾 <a href="javascript:void(0);" onclick="window.oNarcissisticInjuryExportNotes();">Export your notes</a></span>
+                    <span>|</span>
+                    <span>📥 <a href="javascript:void(0);" onclick="window.oNarcissisticInjuryImportNotes();">Import your notes</a></span>
+                </div>
+
+                <div class="narcissistic-injury-applet-memes">
                     <img src="" onclick="window.showAnotherNPDMeme(); window.playAudio('click.wav');" alt="meme"/>
                 </div>
 
-                <div class="npd-quickhelp-applet-notice">
+                <div class="narcissistic-injury-applet-notice">
                     This is a first aid applet for people with <a href="https://www.danielbrendel.com/blog/41-awareness-for-narcissistic-personality-disorder">Narcissistic Personality Disorder</a>. We are valid. We deserve well-being.
                 </div>
 			</div>
@@ -331,9 +393,9 @@ window.NpdQuickhelp = class {
     infos()
     {
         return {
-            name: 'Npd Quickhelp',
+            name: 'Narcissistic Injury',
             version: '1.0',
-            icon: window.location.origin + '/img/icons/npd-quickhelp.png'
+            icon: window.location.origin + '/img/icons/narcissistic-injury.png'
         };
     }
 
@@ -345,17 +407,17 @@ window.NpdQuickhelp = class {
     styles()
     {
         return `
-			#column-window-npd-quickhelp .window-body {
+			#column-window-narcissistic-injury .window-body {
 				width: 98%;
 				height: 100%;
 			}
 
-            #column-window-npd-quickhelp .window {
+            #column-window-narcissistic-injury .window {
 				background-color: rgb(32, 32, 30) !important;
                 color: rgb(200, 200, 200) !important;
 			}
 		
-            .npd-quickhelp-applet {
+            .narcissistic-injury-applet {
                 position: relative;
                 overflow-y: auto;
                 height: 95%;
@@ -364,57 +426,61 @@ window.NpdQuickhelp = class {
                 font-family: Bahnschrift, Arial, Verdana, sans-serif;
             }
 			
-			.npd-quickhelp-applet-info {
+			.narcissistic-injury-applet-info {
 				margin-top: 20px;
                 margin-bottom: 25px;
 				font-size: 1.5em;
 			}
+
+            .narcissistic-injury-applet-info div:first-child {
+                margin-bottom: 5px;
+            }
 			
 			@media screen and (min-width: 951px) {
-				.npd-quickhelp-applet-info {
+				.narcissistic-injury-applet-info {
 					font-size: 1.2em;
 				}
 			}
 			
-			.npd-quickhelp-applet-topics {
+			.narcissistic-injury-applet-topics {
 				position: relative;
 			}
 
-            .npd-quickhelp-applet-topics ul {
+            .narcissistic-injury-applet-topics ul {
                 margin-top: 5px;
                 margin-bottom: -30px;
                 font-style: italic;
             }
 			
-			.npd-quickhelp-applet-button {
+			.narcissistic-injury-applet-button {
 				margin-top: 20px;
 			}
 			
-			.npd-quickhelp-applet-button a.btn {
+			.narcissistic-injury-applet-button a.btn {
 				width: 90% !important;
                 background: #3a3a3a !important;
                 color: #bcbcbc !important;
                 box-shadow: inset -1px -1px rgb(10, 10, 10), inset 1px 1px #000, inset -2px -2px gray, inset 2px 2px rgb(172, 172, 172) !important;
 			}
 
-            .npd-quickhelp-applet-button a.btn:not(:disabled):active {
+            .narcissistic-injury-applet-button a.btn:not(:disabled):active {
                 color: #bcbcbc !important;
 				box-shadow: inset -1px -1px #000, inset 1px 1px rgb(10, 10, 10), inset -2px -2px rgb(223, 223, 223), inset 2px 2px gray !important;
 			}
 
-            .npd-quickhelp-applet-helptext {
+            .narcissistic-injury-applet-helptext {
                 position: relative;
                 margin-bottom: 20px;
                 padding: 10px;
                 text-align: left;
             }
 
-            .npd-quickhelp-applet-textarea {
+            .narcissistic-injury-applet-textarea {
                 position: relative;
                 margin-bottom: 50px;
             }
 
-            .npd-quickhelp-applet-textarea textarea {
+            .narcissistic-injury-applet-textarea textarea {
                 width: 90%;
                 height: 200px;
                 color: rgb(250, 250, 250);
@@ -422,7 +488,23 @@ window.NpdQuickhelp = class {
                 font-size: 1.2em;
             }
 
-            .npd-quickhelp-applet-memes {
+            .narcissistic-injury-applet-data {
+                position: relative;
+                margin-top: 30px;
+                color: #5b5b5b;
+            }
+
+            .narcissistic-injury-applet-data a {
+                color: #925cf2;
+                text-decoration: none;
+            }
+
+            .narcissistic-injury-applet-data a:hover {
+                color: #b38df7;
+                text-decoration: underline;
+            }
+
+            .narcissistic-injury-applet-memes {
                 position: relative;
                 width: 90%;
                 margin-top: 30px;
@@ -430,23 +512,23 @@ window.NpdQuickhelp = class {
                 cursor: pointer;
             }
 
-            .npd-quickhelp-applet-memes img {
+            .narcissistic-injury-applet-memes img {
                 width: 100%;
             }
 
-            .npd-quickhelp-applet-notice {
+            .narcissistic-injury-applet-notice {
                 position: relative;
                 font-size: 0.8em;
                 margin-top: 25px;
                 margin-bottom: 20px;
             }
 
-            .npd-quickhelp-applet-notice a {
+            .narcissistic-injury-applet-notice a {
                 color: #925cf2;
                 text-decoration: none;
             }
 
-            .npd-quickhelp-applet-notice a:hover {
+            .narcissistic-injury-applet-notice a:hover {
                 color: #b38df7;
                 text-decoration: underline;
             }
