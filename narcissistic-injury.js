@@ -324,8 +324,6 @@ window.NarcissisticInjury = class {
      */
     onClose()
     {
-        console.log('onClose');
-		
 		const wnd = document.querySelector('#column-window-narcissistic-injury');
 		if (wnd) {
 			const xpos = window.saveSetting('narcissistic-injury-position-x', wnd.style.left, false);
