@@ -12,7 +12,7 @@ window.Frisky = class {
 
 			const taskbar = document.querySelector('#taskbar');
 
-			let birds = [];
+			window.friskyBirds = [];
 			let dir = false;
 
 			for (let i = 0; i < BIRD_COUNT; i++) {
@@ -22,17 +22,18 @@ window.Frisky = class {
 				let bird = new Sprite(window.location.origin + '/applets/frisky/bird' + (window.random(0, 5) + 1) + '.png', 3, 32, 32, '.widgets');
 				bird.setPosition(startX, startY);
 				bird.setVisibility(false);
+				bird.getElement().classList.add('frisky-bird');
 
 				if (!dir) {
 					bird.flip();
 				}
 
 				const callback = bird.updateFrames.bind(bird);
-				setInterval(callback, 200);
+				let interval = setInterval(callback, 200);
 
 				dir = !dir;
 
-				birds.push({
+				window.friskyBirds.push({
 					ent: bird,
 					dir: dir,
 					x: startX,
@@ -40,12 +41,13 @@ window.Frisky = class {
 					speed: window.random(0, 50) + 1,
 					delay: window.random(0, 5000) + 100,
 					timer: null,
+					interval: interval,
 					destruct: false
 				});
 			}
 
-			for (let i = 0; i < birds.length; i++) {
-				const item = birds[i];
+			for (let i = 0; i < window.friskyBirds.length; i++) {
+				const item = window.friskyBirds[i];
 
 				setTimeout(function() {
 					item.ent.setVisibility(true);
@@ -75,13 +77,15 @@ window.Frisky = class {
 				}, item.delay);
 			}
 
-			setInterval(function() {
-				for (let i = 0; i < birds.length; i++) {
-					let item = birds[i];
+			window.friskyBirdDestructionCheck = setInterval(function() {
+				for (let i = 0; i < window.friskyBirds.length; i++) {
+					let item = window.friskyBirds[i];
 
 					if (item.destruct) {
 						item.ent.destroy();
-						birds.splice(i, 1);
+						clearInterval(item.interval);
+						clearInterval(item.timer);
+						window.friskyBirds.splice(i, 1);
 
 						break;
 					}
@@ -91,7 +95,7 @@ window.Frisky = class {
 
 		window.friskyBirdAnim = function() {
 			const WAVE_DELAY = 15000;
-			setInterval(window.friskySpawnBirds, WAVE_DELAY + window.random(0, 5000));
+			window.friskyBirdAnimInterval = setInterval(window.friskySpawnBirds, WAVE_DELAY + window.random(0, 5000));
 			window.friskySpawnBirds();
 		};
 
@@ -156,6 +160,8 @@ window.Frisky = class {
 				}
 			];
 
+			window.friskyPlants = [];
+
 			for (let i = 0; i < spawnData.length; i++) {
 				const startX = spawnData[i].x;
 				const startY = spawnData[i].y;
@@ -169,11 +175,12 @@ window.Frisky = class {
 				plant.setTransformOrigin('50% 90%');
 				plant.setPlacement(placement);
 				plant.setZIndex(100);
+				plant.getElement().classList.add('frisky-plant');
 
 				let rotValue = -ROTATION_SPAN;
 				let rotDir = 1;
 
-				setInterval(function() {
+				window.friskyPlantAnimInterval = setInterval(function() {
 					plant.setRotation(rotValue);
 
 					rotValue += rotDir;
@@ -181,6 +188,8 @@ window.Frisky = class {
 						rotDir *= -1;
 					}
 				}, 55);
+
+				window.friskyPlants.push(plant);
 			}
 		};
 		
@@ -206,19 +215,61 @@ window.Frisky = class {
 				window.arrAmbientSounds[index].play();
 			}
 			
-			setInterval(playAmbientSound, 5000);
+			window.friskyAmbientSoundInterval = setInterval(playAmbientSound, 5000);
 			playAmbientSound();
 		};
+
+		window.friskyStartAll = function() {
+			window.friskyBirdAnim();
+			window.friskyPlantAnim();
+			window.friskyLoadAmbientSounds();
+			window.friskyAmbientSound();
+		};
+
+		window.friskyStopAll = function() {
+			for (let i = 0; i < window.friskyBirds.length; i++) {
+				window.friskyBirds[i].ent.destroy();
+				clearInterval(window.friskyBirds[i].interval);
+				clearInterval(window.friskyBirds[i].timer);
+			}
+
+			clearInterval(window.friskyBirdAnimInterval);
+			clearInterval(window.friskyBirdDestructionCheck);
+
+			for (let i = 0; i < window.friskyPlants.length; i++) {
+				window.friskyPlants[i].destroy();
+			}
+
+			window.friskyPlants = [];
+
+			clearInterval(window.friskyPlantAnimInterval);
+
+			clearInterval(window.friskyAmbientSoundInterval);
+		};
+
+		window.addEventListener('resize', function() {
+			let boxh = 65;
+			let ypos = window.innerHeight - boxh;
+
+			for (let i = 0; i < window.friskyPlants.length; i++) {
+				const xpos = window.friskyPlants[i].getX();
+				window.friskyPlants[i].setPosition(xpos, ypos);
+			}
+		});
 		
 		window.friskyToggle = function() {
 			window.friskyEnabled = window.readSetting('frisky-enabled', '0');
 			if ((window.friskyEnabled) && (window.friskyEnabled == '1')) {
 				window.saveSetting('frisky-enabled', '0');
+				window.friskyAction.innerText = 'Enable';
+				window.friskyAction.classList.add('frisky-applet-button-enable');
+				window.friskyStopAll();
 			} else {
+				window.friskyStartAll();
 				window.saveSetting('frisky-enabled', '1');
+				window.friskyAction.innerText = 'Disable';
+				window.friskyAction.classList.add('frisky-applet-button-disable');
 			}
-			
-			location.reload();
 		};
     }
 
@@ -238,6 +289,7 @@ window.Frisky = class {
      */
     onRemove()
     {
+		window.friskyStopAll();
     }
 
     /**
@@ -255,10 +307,7 @@ window.Frisky = class {
 			scr.id = 'friskySpriteManager';
 			scr.src = window.location.origin + '/applets/sprite.js';
 			scr.onload = function() {
-				window.friskyBirdAnim();
-				window.friskyPlantAnim();
-				window.friskyLoadAmbientSounds();
-				window.friskyAmbientSound();
+				window.friskyStartAll();
 			};
 			
 			document.head.appendChild(scr);
