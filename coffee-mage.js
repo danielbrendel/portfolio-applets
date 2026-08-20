@@ -41,7 +41,7 @@ window.CoffeeMage = class {
 			
 			setTimeout(function() {
 				text.classList.remove('coffee-mage-glow-text');
-			}, 1500);
+			}, 1000);
 			
 			window.playAudio('tada.wav');
 		};
