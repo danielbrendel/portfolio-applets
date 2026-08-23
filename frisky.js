@@ -301,17 +301,18 @@ window.Frisky = class {
     onLoad()
     {
 		window.friskyEnabled = window.readSetting('frisky-enabled', '0');
-		if ((window.friskyEnabled) && (window.friskyEnabled == '1')) {
-			const scr = document.createElement('script');
-			
-			scr.id = 'friskySpriteManager';
-			scr.src = window.location.origin + '/applets/sprite.js';
-			scr.onload = function() {
+
+		const scr = document.createElement('script');
+		
+		scr.id = 'friskySpriteManager';
+		scr.src = window.location.origin + '/applets/sprite.js';
+		scr.onload = function() {
+			if ((window.friskyEnabled) && (window.friskyEnabled == '1')) {
 				window.friskyStartAll();
-			};
-			
-			document.head.appendChild(scr);
-		}
+			}
+		};
+		
+		document.head.appendChild(scr);
     }
 
     /**
