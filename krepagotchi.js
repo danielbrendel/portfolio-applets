@@ -7,6 +7,7 @@ window.Krepagotchi = class {
      */
     constructor()
     {
+        window.KrepagotchiBaseUrl = 'https://game.krepagotchi.com';
     }
 
     /**
@@ -41,7 +42,7 @@ window.Krepagotchi = class {
     {
         document.getElementById('krepagotchi-applet').innerHTML = `<iframe 
 					id="krepagotchi-iframe"
-					src="https://krepagotchi.danielbrendel.com">
+					src="` + window.KrepagotchiBaseUrl + `">
 				</iframe>`;
     }
 
@@ -71,7 +72,7 @@ window.Krepagotchi = class {
     {
         return {
             wndWidth: '360px',
-            wndHeight: '640px',
+            wndHeight: '660px',
             btnClose: true,
             btnMaximize: false,
             btnMinimize: false
@@ -88,7 +89,7 @@ window.Krepagotchi = class {
         return {
             name: 'Krepagotchi',
             version: '1.0',
-            icon: 'https://krepagotchi.danielbrendel.com/img/logo.png'
+            icon: window.KrepagotchiBaseUrl + '/img/logo.png'
         };
     }
 
@@ -103,7 +104,7 @@ window.Krepagotchi = class {
 			#krepagotchi-applet {
 				position: relative;
 				width: 360px;
-				height: 622px;
+				height: 640px;
 				top: -8px;
 				left: -8px;
 				overflow: hidden;
