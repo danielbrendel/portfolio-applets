@@ -16,6 +16,8 @@ window.MinecraftServer = class {
             const body = table.getElementsByTagName('tbody')[0];
 
             const row = body.insertRow(-1);
+            row.setAttribute('tabindex', '0');
+
             const cellAddr = row.insertCell(0);
             const cellName = row.insertCell(1);
 
@@ -23,9 +25,33 @@ window.MinecraftServer = class {
             cellName.textContent = label;
 
             row.addEventListener('dblclick', function() {
+                window.mcsrvRemoveActiveRows(table);
+                this.classList.add('active');
                 window.mcsrvQueryInfo(this.children[0].innerText, this.children[1]);
                 window.playAudio('click.wav');
             });
+
+            row.addEventListener('keydown', function(event) {
+                if (event.key === 'Delete') {
+                    event.preventDefault();
+
+                    if (confirm('Do you want to remove this server from the list?')) {
+                        this.remove();
+
+                        window.mcsrvSaveTable(table);
+                    }
+                }
+            });
+
+            window.mcsrvSaveTable(table);
+        };
+
+        window.mcsrvRemoveActiveRows = function(table) {
+            for (let row of table.rows) {
+                if (row.classList.contains('active')) {
+                    row.classList.remove('active');
+                }
+            }
         };
 
         window.mcsrvQueryInfo = function(address, retElem = null) {
@@ -35,14 +61,32 @@ window.MinecraftServer = class {
             window.mcsrvSetStatusBar('Trying to get server info for ' + address + ' ...');
 
             window.ajaxRequest('get', `https://mcsrvstatus.danielbrendel.com/mcstatus.php?address=${addr}&port=${port}`, {}, function(response) {
-                console.log(response);
-
                 if (response.online) {
-                    document.querySelector('.minecraft-server-content-data').style.top = '-414px';
                     document.querySelector('.minecraft-server-content-data-header-icon').innerHTML = '<img src="' + response.icon + '" alt="icon"/>';
                     document.querySelector('.minecraft-server-content-data-header-label').innerHTML = response.motd.html;
+                    document.querySelector('.minecraft-server-content-data-address').innerHTML = 'Address: ' + response.ip + ':' + response.port;
                     document.querySelector('.minecraft-server-content-data-version').innerHTML = 'Version: ' + response.protocol.version + ' / ' + response.protocol.name;
                     document.querySelector('.minecraft-server-content-data-counts').innerHTML = 'Players: ' + response.players.online + '/' + response.players.max;
+
+                    if (typeof response.software !== 'undefined') {
+                        document.querySelector('.minecraft-server-content-data-software').innerHTML = 'Software: ' + response.software;
+                    }
+
+                    if (typeof response.hostname !== 'undefined') {
+                        document.querySelector('.minecraft-server-content-data-hostname').innerHTML = 'Hostname: ' + response.hostname;
+                    }
+
+                    let elPlayerList = document.querySelector('.minecraft-server-content-data-players');
+                    elPlayerList.innerHTML = '';
+
+                    if (typeof response.players.list !== 'undefined') {
+                        for (let player of response.players.list) {
+                            const el = document.createElement('div');
+                            el.innerText = player.name + ' (' + player.uuid + ')';
+
+                            elPlayerList.appendChild(el);
+                        }
+                    }
 
                     if (retElem !== null) {
                         retElem.innerText = response.motd.clean;
@@ -50,6 +94,15 @@ window.MinecraftServer = class {
 
                     window.mcsrvSetStatusBar(address + ' | Server is online | Version: ' + response.version);
                 } else {
+                    document.querySelector('.minecraft-server-content-data-header-icon').innerHTML = '<img src="' + window.location.origin + '/img/icons/error.png' + '" alt="icon"/>';
+                    document.querySelector('.minecraft-server-content-data-header-label').innerHTML = 'Server is unreachable';
+                    document.querySelector('.minecraft-server-content-data-address').innerHTML = '';
+                    document.querySelector('.minecraft-server-content-data-version').innerHTML = '';
+                    document.querySelector('.minecraft-server-content-data-counts').innerHTML = '';
+                    document.querySelector('.minecraft-server-content-data-software').innerHTML = '';
+                    document.querySelector('.minecraft-server-content-data-hostname').innerHTML = '';
+                    document.querySelector('.minecraft-server-content-data-players').innerHTML = '';
+
                     window.mcsrvSetStatusBar('Server ' + address + ' is offline');
                 }
             });
@@ -107,7 +160,9 @@ window.MinecraftServer = class {
      */
     onRemove()
     {
-        window.removeSetting('mcsrv-table');
+        if (confirm('Do you also want to remove your stored server list?')) {
+            window.removeSetting('mcsrv-table');
+        }
     }
 
     /**
@@ -140,6 +195,14 @@ window.MinecraftServer = class {
 			
 			window.setWidgetCentered(appwnd);
 		}
+
+        const table = document.querySelector('.minecraft-server-content-list').children[0];
+        const status = document.querySelector('.status-bar-field');
+        if (table.rows.length <= 1) {
+            status.innerText = 'Add servers to list in order to query public information';
+        } else {
+            status.innerText = 'Double-click a list-item to fetch server information';
+        }
     }
 
     /**
@@ -149,7 +212,6 @@ window.MinecraftServer = class {
      */
     onClose()
     {
-        window.mcsrvSaveTable(document.querySelector('.minecraft-server-content-list').children[0]);
     }
 
     /**
@@ -192,6 +254,9 @@ window.MinecraftServer = class {
                             <div class="minecraft-server-content-data-header-label"></div>
                         </div>
 
+                        <div class="minecraft-server-content-data-address"></div>
+                        <div class="minecraft-server-content-data-hostname"></div>
+                        <div class="minecraft-server-content-data-software"></div>
                         <div class="minecraft-server-content-data-version"></div>
                         <div class="minecraft-server-content-data-counts"></div>
 
@@ -201,7 +266,7 @@ window.MinecraftServer = class {
 
                 <div class="minecraft-server-statusbar">
                     <div class="status-bar">
-                        <p class="status-bar-field">Double-click a list-item to fetch server information</p>
+                        <p class="status-bar-field"></p>
                     </div>
                 </div>
 			</div>
@@ -217,7 +282,7 @@ window.MinecraftServer = class {
     {
         return {
             wndWidth: '950px',
-            wndHeight: '630px',
+            wndHeight: '620px',
             btnClose: true,
             btnMaximize: false,
             btnMinimize: false
@@ -310,9 +375,10 @@ window.MinecraftServer = class {
 			}
 
             .minecraft-server-action {
-                position: relative;
+                position: absolute;
                 display: inline-block;
-                top: 12px;
+                top: 2px;
+                right: 10px;
             }
 
             .minecraft-server-action a.btn {
@@ -366,22 +432,24 @@ window.MinecraftServer = class {
                 height: unset !important;
             }
 
-            .minecraft-server-content-list tbody tr:active {
+            .minecraft-server-content-list tbody tr.active {
                 background-color: rgb(150, 150, 150);
             }
 
             .minecraft-server-content-data {
-                position: relative;
+                position: absolute;
                 display: inline-block;
-                width: 49.4%;
-                height: 95.5%;
-                top: -3px;
-                left: -3px;
-                background-color: rgb(100, 100, 100);
+                width: 45.4%;
+                right: 55px;
             }
 
             .minecraft-server-content-data-header {
-                display: inline-block;
+                position: relative;
+                display: flex;
+                width: 100%;
+                align-items: center;
+                margin-top: 10px;
+                margin-bottom: 20px;
             }
 
             .minecraft-server-content-data-header-icon {
@@ -391,9 +459,30 @@ window.MinecraftServer = class {
             .minecraft-server-content-data-header-label {
                 position: relative;
                 display: inline-block;
-                top: -23px;
-                font-size: 1.5em;
+                width: 80%;
+                font-size: 1.2em;
                 margin-left: 10px;
+            }
+
+            .minecraft-server-content-data-address {
+                position: relative;
+            }
+
+            .minecraft-server-content-data-hostname {
+                position: relative;
+            }
+
+            .minecraft-server-content-data-software {
+                position: relative;
+            }
+
+            .minecraft-server-content-data-counts {
+                position: relative;
+            }
+
+            .minecraft-server-content-data-players {
+                position: relative;
+                margin-top: 20px;
             }
 
             .minecraft-server-statusbar {
