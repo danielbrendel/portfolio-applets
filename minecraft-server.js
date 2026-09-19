@@ -27,7 +27,10 @@ window.MinecraftServer = class {
             row.addEventListener('dblclick', function() {
                 window.mcsrvRemoveActiveRows(table);
                 this.classList.add('active');
+
                 window.mcsrvQueryInfo(this.children[0].innerText, this.children[1]);
+
+                window.getSelection().removeAllRanges();
                 window.playAudio('click.wav');
             });
 
@@ -383,7 +386,7 @@ window.MinecraftServer = class {
 			
 			@media screen and (max-width: 500px) {
 				.minecraft-server-input {
-					width: 60%;
+					width: 82%;
 				}
 			}
 			
@@ -478,6 +481,13 @@ window.MinecraftServer = class {
                 right: 55px;
             }
 
+            @media screen and (max-width: 500px) {
+                .minecraft-server-content-data {
+                    right: 12px;
+                    overflow-x: auto;
+                }
+            }
+
             .minecraft-server-content-data-header {
                 position: relative;
                 display: flex;
@@ -526,6 +536,16 @@ window.MinecraftServer = class {
                 left: -8px;
                 width: 100%;
                 background-color: rgb(220, 220, 220);
+            }
+
+            @media screen and (max-width: 500px) {
+                .minecraft-server-statusbar {
+                    height: 22px;
+                }
+
+                .minecraft-server-statusbar p.status-bar-field {
+                    padding-top: 5px;
+                }
             }
         `;
     }
