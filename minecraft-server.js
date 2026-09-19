@@ -203,6 +203,16 @@ window.MinecraftServer = class {
         } else {
             status.innerText = 'Double-click a list-item to fetch server information';
         }
+
+        window.mcsrvUpdateStatus = setInterval(function() {
+            for (let row of table.rows) {
+                if (row.classList.contains('active')) {
+                    window.mcsrvQueryInfo(row.cells[0].innerText, row.cells[1]);
+
+                    break;
+                }
+            }
+        }, 180000);
     }
 
     /**
@@ -212,6 +222,7 @@ window.MinecraftServer = class {
      */
     onClose()
     {
+        clearInterval(window.mcsrvUpdateStatus);
     }
 
     /**
@@ -282,7 +293,7 @@ window.MinecraftServer = class {
     {
         return {
             wndWidth: '950px',
-            wndHeight: '620px',
+            wndHeight: '614px',
             btnClose: true,
             btnMaximize: false,
             btnMinimize: false
@@ -311,6 +322,14 @@ window.MinecraftServer = class {
     styles()
     {
         return `
+            #column-window-minecraft-server .window {
+				width: 100%;
+				height: 100%;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-image: url('` + window.location.origin + `/img/minecraft-swamp.png');
+			}
+
 			#column-window-minecraft-server .window-body {
 				width: 100%;
 				height: 100%;
@@ -401,7 +420,8 @@ window.MinecraftServer = class {
 				height: 530px;
 				top: 5px;
 				left: -8px;
-				background-color: rgb(150, 150, 150);
+                color: #f2f2f2;
+				background-color: rgba(32, 32, 32, 0.5);
 				box-shadow: inset -1px -1px #fff, inset 1px 1px rgb(10, 10, 10), inset -2px -2px rgb(223, 223, 223), inset 2px 2px grey;
 			}
 
@@ -417,7 +437,7 @@ window.MinecraftServer = class {
                 width: 100%;
                 height: 99.5%;
                 overflow-y: auto;
-                background-color: rgb(200, 200, 200);
+                background-color: rgba(32, 32, 32, 0.5);
             }
 
             .minecraft-server-content-list table > tbody > tr > * {
@@ -428,8 +448,18 @@ window.MinecraftServer = class {
                 width: 100%;
             }
 
+            .minecraft-server-content-list thead tr {
+                color: black;
+            }
+
             .minecraft-server-content-list td {
                 height: unset !important;
+            }
+
+            .minecraft-server-content-list tbody {
+                background: transparent;
+                color: wheat;
+                font-weight: bold;
             }
 
             .minecraft-server-content-list tbody tr.active {
@@ -487,9 +517,10 @@ window.MinecraftServer = class {
 
             .minecraft-server-statusbar {
                 position: absolute;
-                bottom: -32px;
+                bottom: -27px;
                 left: -8px;
                 width: 100%;
+                background-color: rgb(220, 220, 220);
             }
         `;
     }
