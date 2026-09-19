@@ -401,7 +401,7 @@ window.MinecraftServer = class {
             }
 
             .minecraft-server-action a.btn {
-                min-width: 30px;
+                min-width: 43px;
                 height: 30px;
                 cursor: pointer;
             }
@@ -409,9 +409,9 @@ window.MinecraftServer = class {
             .minecraft-server-action img {
                 position: relative;
                 top: -5px;
-                left: 5px;
                 width: 20px;
                 height: 20px;
+                margin-left: 12px;
             }
 			
 			.minecraft-server-content {
@@ -421,7 +421,7 @@ window.MinecraftServer = class {
 				top: 5px;
 				left: -8px;
                 color: #f2f2f2;
-				background-color: rgba(32, 32, 32, 0.5);
+				background-color: rgba(32, 32, 32, 0.63);
 				box-shadow: inset -1px -1px #fff, inset 1px 1px rgb(10, 10, 10), inset -2px -2px rgb(223, 223, 223), inset 2px 2px grey;
 			}
 
@@ -437,7 +437,8 @@ window.MinecraftServer = class {
                 width: 100%;
                 height: 99.5%;
                 overflow-y: auto;
-                background-color: rgba(32, 32, 32, 0.5);
+                background: transparent;
+                border-right: 2px solid rgb(132, 132, 132);
             }
 
             .minecraft-server-content-list table > tbody > tr > * {
@@ -462,8 +463,12 @@ window.MinecraftServer = class {
                 font-weight: bold;
             }
 
+            .minecraft-server-content-list tbody tr:hover {
+                background-color: rgb(138, 132, 93);
+            }
+
             .minecraft-server-content-list tbody tr.active {
-                background-color: rgb(150, 150, 150);
+                background-color: rgb(132, 123, 55);
             }
 
             .minecraft-server-content-data {
